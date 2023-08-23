@@ -22,9 +22,13 @@ import { CircularProgress } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { deepPurple } from "@mui/material/colors";
-import { signInWithEmail } from "../../utils/firebase.utils";
+import {
+  signInWithEmail,
+  signInWithGooglePopup,
+} from "../../utils/firebase.utils";
 import { selectUser, setUser } from "../../store/user/user.reducer";
 import { useNavigate } from "react-router";
+import GoogleIcon from "@mui/icons-material/Google";
 
 function Copyright(props) {
   return (
@@ -43,7 +47,6 @@ const defaultTheme = createTheme();
 
 export default function Login() {
   const navigate = useNavigate();
-  const user = useSelector(selectUser);
   const distpatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const popularMovies = useSelector(selectPopularMovie);
@@ -56,13 +59,16 @@ export default function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     const email = event.target.email.value;
     const password = event.target.password.value;
     const response = await signInWithEmail(email, password);
+
     if (response === "Firebase: Error (auth/user-not-found).") {
       alert("Böyle bir kullanıcı bulunamadı.");
     } else {
       distpatch(setUser(response));
+      setLoading(false);
       if (response && response.operationType === "signIn") {
         navigate("/home");
       } else {
@@ -70,12 +76,31 @@ export default function Login() {
       }
     }
   };
+  const handleSubmitGoogle = async (event) => {
+    const response = await signInWithGooglePopup();
+    console.log(response);
+    if (response === "Firebase: Error (auth/user-not-found).") {
+      alert("Böyle bir kullanıcı bulunamadı.");
+    } else {
+      distpatch(setUser(response));
+      if (response && response.operationType === "signIn") {
+        setLoading(false);
+        navigate("/home");
+      } else {
+        alert("Böyle bir kullanıcı bulunamadı.");
+      }
+    }
+  };
 
-  if (results === undefined) {
+  if (results === undefined || loading === true) {
     setTimeout(() => {
       setLoading(false);
-    }, 3000);
-    return <div>{loading ? <CircularProgress /> : null}</div>;
+    }, 2000);
+    return (
+      <div className="w-full h-[100vh] flex justify-center items-center bg-[#191919]">
+        {loading ? <CircularProgress color="success" /> : null}
+      </div>
+    );
   }
 
   return (
@@ -94,9 +119,18 @@ export default function Login() {
             backgroundColor: "black",
             backgroundSize: "cover",
             backgroundPosition: "center",
+            backdropFilter: "blur(10px)",
+            textShadow: "0px 0px 10px black",
           }}
-          className={`flex  transition-opacity duration-500 ease-in animate-waving-hand `}
+          className={`flex w-full  transition-opacity duration-500 ease-in animate-waving-hand`}
         >
+          <div className="w-[150%] h-full text-white font-extrabold flex items-end p-10 box-border">
+            <div className="flex-col">
+              <p className="border-b-2">{results[counter].original_title}</p>
+              <p>{results[counter].release_date}</p>
+              <p>{results[counter].vote_average} ✨</p>
+            </div>
+          </div>
           <div className="flex justify-end items-end p-3 h-full w-[100%] box-border">
             <ArrowBackIosIcon
               className="text-white cursor-pointer hover:scale-125"
@@ -188,9 +222,22 @@ export default function Login() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2, backgroundColor: "white", color: "black" }}
               >
                 Sign In
+              </Button>
+              <Button
+                fullWidth
+                onClick={handleSubmitGoogle}
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  border: "1px solid black",
+                  padding: "15px",
+                  color: "white",
+                }}
+              >
+                <GoogleIcon /> Sign In With Google
               </Button>
               <Grid container>
                 <Grid item xs>
