@@ -78,7 +78,6 @@ export default function Login() {
   };
   const handleSubmitGoogle = async (event) => {
     const response = await signInWithGooglePopup();
-    console.log(response);
     if (response === "Firebase: Error (auth/user-not-found).") {
       alert("Böyle bir kullanıcı bulunamadı.");
     } else {
