@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { setClickShows } from "../../store/movieData/movie.reducer";
 import { Link } from "react-router-dom";
 
-const Card = ({ results, title }) => {
+const Card = ({ results, title, amount }) => {
   const dispatch = useDispatch();
   return (
     <>
@@ -19,7 +19,7 @@ const Card = ({ results, title }) => {
         <div className=" w-full h-[40%]  box-border flex justify-around items-center ">
           {results
             ? results.map((results, i) => {
-                if (i < 5) {
+                if (i < amount) {
                   return (
                     <Box
                       key={results.id}

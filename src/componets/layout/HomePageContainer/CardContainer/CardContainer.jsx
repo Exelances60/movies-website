@@ -17,12 +17,18 @@ const CardContainer = () => {
     <>
       <Box className="w-full h-[85%]  overflow-y-scroll flex">
         <Box className="md:w-[100%] xl:w-[85%] w-[100%] h-[100%] ">
-          <Card results={popularMovies.results} title={"Popular Movies"} />
           <Card
+            amount={5}
+            results={popularMovies.results}
+            title={"Popular Movies"}
+          />
+          <Card
+            amount={5}
             results={upComingMovies.results}
             title={"Upcoming Movies"}
           ></Card>
           <Card
+            amount={5}
             results={popularTvShows.results}
             title={"Popular Tv Shows"}
           ></Card>
