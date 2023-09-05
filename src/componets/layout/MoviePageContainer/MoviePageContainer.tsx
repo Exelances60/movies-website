@@ -6,6 +6,7 @@ import { Box, CircularProgress } from "@mui/material";
 import { checkLogin } from "../../../utils/checkLogin/checkLogin";
 import { useNavigate } from "react-router";
 import {
+  IpopularMovies,
   clickMoviesDetails,
   fetchMovieVideos,
   selectClickMoviesDetails,
@@ -14,7 +15,7 @@ import {
 } from "../../../store/movieData/movie.reducer";
 import MovieCardContainer from "./MovieCardContainer/MovieCardContainer";
 
-const MoviePageContainer = () => {
+const MoviePageContainer = (): IpopularMovies => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);

@@ -1,5 +1,6 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
 export const fetchPopularMovies = createAsyncThunk(
   "movie/fetchPopularMovies",
@@ -42,7 +43,7 @@ export const fetchUpComingMovies = createAsyncThunk(
 
 export const fetchMovieVideos = createAsyncThunk(
   "movie/fetchMovieVideos",
-  async (id) => {
+  async (id: number) => {
     const options = {
       method: "GET",
       headers: {
@@ -81,7 +82,7 @@ export const popularTvShows = createAsyncThunk(
 );
 export const clickMoviesDetails = createAsyncThunk(
   "movie/clickMoviesDetails",
-  async (id) => {
+  async (id: number) => {
     const options = {
       method: "GET",
       headers: {
@@ -98,17 +99,71 @@ export const clickMoviesDetails = createAsyncThunk(
     return response?.json();
   }
 );
+export type popularMoviesResults = {
+  adult: boolean;
+  backdrop_path: string;
+  id: number;
+  genre_ids: number[];
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+};
+export type IpopularMovies = {
+  page: number;
+  results: popularMoviesResults[];
+  total_pages: number;
+  total_results: number;
+};
+
+export type MovieState = {
+  popularMovies: IpopularMovies;
+  upComingMovies: IpopularMovies;
+  popularTvShows: IpopularMovies;
+  clickShows: object;
+  clickShowsVideos: object;
+  clickMoviesDetails: object;
+};
+export type popularMoviesMap = {
+  [key: string]: popularMoviesResults[];
+};
 
 export const movieSlice = createSlice({
   name: "movie",
   initialState: {
-    popularMovies: [{}],
-    upComingMovies: [{}],
-    popularTvShows: [{}],
-    clickShows: {},
+    popularMovies: {
+      page: 0,
+      results: [],
+      total_pages: 0,
+      total_results: 0,
+    },
+    upComingMovies: {
+      page: 0,
+      results: [],
+      total_pages: 0,
+      total_results: 0,
+    },
+    popularTvShows: {
+      page: 0,
+      results: [],
+      total_pages: 0,
+      total_results: 0,
+    },
+    clickShows: {
+      page: 0,
+      results: [],
+      total_pages: 0,
+      total_results: 0,
+    },
     clickShowsVideos: {},
     clickMoviesDetails: {},
-  },
+  } as MovieState,
   reducers: {
     setPopularMovies: (state, action) => {
       state.popularMovies = action.payload;
@@ -118,15 +173,24 @@ export const movieSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(fetchPopularMovies.fulfilled, (state, action) => {
-      state.popularMovies = action.payload;
-    });
-    builder.addCase(fetchUpComingMovies.fulfilled, (state, action) => {
-      state.upComingMovies = action.payload;
-    });
-    builder.addCase(popularTvShows.fulfilled, (state, action) => {
-      state.popularTvShows = action.payload;
-    });
+    builder.addCase(
+      fetchPopularMovies.fulfilled,
+      (state, action: PayloadAction<IpopularMovies>) => {
+        state.popularMovies = action.payload;
+      }
+    );
+    builder.addCase(
+      fetchUpComingMovies.fulfilled,
+      (state, action: PayloadAction<IpopularMovies>) => {
+        state.upComingMovies = action.payload;
+      }
+    );
+    builder.addCase(
+      popularTvShows.fulfilled,
+      (state, action: PayloadAction<IpopularMovies>) => {
+        state.popularTvShows = action.payload;
+      }
+    );
     builder.addCase(fetchMovieVideos.fulfilled, (state, action) => {
       state.clickShowsVideos = action.payload;
     });
@@ -137,12 +201,16 @@ export const movieSlice = createSlice({
 });
 
 export const { setPopularMovies, setClickShows } = movieSlice.actions;
-export const selectPopularMovie = (state) => state.movie.popularMovies;
-export const selectUpComingMovie = (state) => state.movie.upComingMovies;
-export const selectPopularTvShows = (state) => state.movie.popularTvShows;
-export const selectClickShows = (state) => state.movie.clickShows;
-export const selectClickShowsVideos = (state) => state.movie.clickShowsVideos;
-export const selectClickMoviesDetails = (state) =>
+export const selectPopularMovie = (state: RootState) =>
+  state.movie.popularMovies;
+export const selectUpComingMovie = (state: RootState) =>
+  state.movie.upComingMovies;
+export const selectPopularTvShows = (state: RootState) =>
+  state.movie.popularTvShows;
+export const selectClickShows = (state: RootState) => state.movie.clickShows;
+export const selectClickShowsVideos = (state: RootState) =>
+  state.movie.clickShowsVideos;
+export const selectClickMoviesDetails = (state: RootState) =>
   state.movie.clickMoviesDetails;
 
 export default movieSlice.reducer;

@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import React from "react";
 import Card from "../../../Card/Card";
 import { useSelector } from "react-redux";
 import {
@@ -7,9 +6,10 @@ import {
   selectPopularTvShows,
   selectUpComingMovie,
 } from "../../../../store/movieData/movie.reducer";
+import { useAppSelector } from "../../../../store/store";
 
 const CardContainer = () => {
-  const popularMovies = useSelector(selectPopularMovie);
+  const popularMovies = useAppSelector((state) => state.movie.popularMovies);
   const upComingMovies = useSelector(selectUpComingMovie);
   const popularTvShows = useSelector(selectPopularTvShows);
 
@@ -27,6 +27,7 @@ const CardContainer = () => {
             results={upComingMovies.results}
             title={"Upcoming Movies"}
           ></Card>
+
           <Card
             amount={5}
             results={popularTvShows.results}

@@ -1,11 +1,20 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { setClickShows } from "../../store/movieData/movie.reducer";
+import {
+  IpopularMovies,
+  popularMoviesResults,
+  setClickShows,
+} from "../../store/movieData/movie.reducer";
 import { Link } from "react-router-dom";
-
-const Card = ({ results, title, amount }) => {
+interface ICardProps {
+  amount: number;
+  results: popularMoviesResults[];
+  title: string;
+}
+const Card: React.FC<ICardProps> = ({ amount, results, title }: ICardProps) => {
   const dispatch = useDispatch();
+
   return (
     <>
       <div>
@@ -25,7 +34,7 @@ const Card = ({ results, title, amount }) => {
                       key={results.id}
                       className=" xl:w-[15%]  xl:h-full md:w-[25%] w-[19.5%]  md:mr-2  "
                     >
-                      <Box className="w-full h-full ">
+                      <Box className="w-ful l h-full ">
                         <Link to={`/Movie/${results.original_title}`}>
                           <img
                             src={`https://image.tmdb.org/t/p/original/${results.poster_path}`}

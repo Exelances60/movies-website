@@ -29,6 +29,7 @@ import {
 import { selectUser, setUser } from "../../store/user/user.reducer";
 import { useNavigate } from "react-router";
 import GoogleIcon from "@mui/icons-material/Google";
+import { useAppSelector } from "../../store/store";
 
 function Copyright(props) {
   return (
@@ -49,7 +50,7 @@ export default function Login() {
   const navigate = useNavigate();
   const distpatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const popularMovies = useSelector(selectPopularMovie);
+  const popularMovies = useAppSelector((state) => state.movie.popularMovies);
   const { results } = popularMovies;
 
   const [counter, setCounter] = useState(2);
