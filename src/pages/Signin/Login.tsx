@@ -1,4 +1,5 @@
 import * as React from "react";
+import { FC } from "react";
 import { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -13,11 +14,7 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchPopularMovies,
-  selectPopularMovie,
-} from "../../store/movieData/movie.reducer";
+import { fetchPopularMovies } from "../../store/movieData/movie.reducer";
 import { CircularProgress } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -26,12 +23,13 @@ import {
   signInWithEmail,
   signInWithGooglePopup,
 } from "../../utils/firebase.utils";
-import { selectUser, setUser } from "../../store/user/user.reducer";
+import { HomePageContainerProps, setUser } from "../../store/user/user.reducer";
 import { useNavigate } from "react-router";
 import GoogleIcon from "@mui/icons-material/Google";
-import { useAppSelector } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { HTMLAttributes, FormEvent, MouseEvent } from "react";
 
-function Copyright(props) {
+function Copyright(props: HTMLAttributes<HTMLElement>) {
   return (
     <Typography variant="body2" color="white" align="center" {...props}>
       {"Copyright © "}
@@ -46,9 +44,13 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function Login() {
+type responseType = HomePageContainerProps & string;
+
+const Login = () => {
   const navigate = useNavigate();
-  const distpatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const distpatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const popularMovies = useAppSelector((state) => state.movie.popularMovies);
   const { results } = popularMovies;
@@ -58,14 +60,17 @@ export default function Login() {
     distpatch(fetchPopularMovies());
   }, []);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
-    const email = event.target.email.value;
-    const password = event.target.password.value;
-    const response = await signInWithEmail(email, password);
 
-    if (response === "Firebase: Error (auth/user-not-found).") {
+    const response: responseType = (await signInWithEmail(
+      email,
+      password
+    )) as responseType;
+    console.log(response, "asdas");
+
+    if (response === "FirebaseError: Firebase: Error (auth/user-not-found).") {
       alert("Böyle bir kullanıcı bulunamadı.");
     } else {
       distpatch(setUser(response));
@@ -77,8 +82,9 @@ export default function Login() {
       }
     }
   };
-  const handleSubmitGoogle = async (event) => {
-    const response = await signInWithGooglePopup();
+  const handleSubmitGoogle = async (event: MouseEvent<HTMLButtonElement>) => {
+    const response: responseType =
+      (await signInWithGooglePopup()) as responseType;
     if (response === "Firebase: Error (auth/user-not-found).") {
       alert("Böyle bir kullanıcı bulunamadı.");
     } else {
@@ -183,12 +189,7 @@ export default function Login() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 1, color: "#FEFEFE" }}
-            >
+            <form onSubmit={handleSubmit}>
               <TextField
                 margin="normal"
                 required
@@ -198,6 +199,8 @@ export default function Login() {
                 label="Email Address"
                 name="email"
                 variant="filled"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 autoFocus
               />
@@ -206,6 +209,8 @@ export default function Login() {
                 required
                 fullWidth
                 name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="text-white bg-[#4D4B4B]"
                 label="Password"
                 type="password"
@@ -251,11 +256,13 @@ export default function Login() {
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
-            </Box>
+              <Copyright />
+            </form>
           </Box>
         </Grid>
       </Grid>
     </ThemeProvider>
   );
-}
+};
+
+export default Login;

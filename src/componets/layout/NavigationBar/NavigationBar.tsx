@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import React, { useEffect } from "react";
 import ListNav from "./List/List";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import MovieCreationOutlinedIcon from "@mui/icons-material/MovieCreationOutlined";

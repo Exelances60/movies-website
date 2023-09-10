@@ -1,9 +1,19 @@
 import { Avatar, Box } from "@mui/material";
-import React from "react";
-import SearchInput from "../../../input/SearchInput";
+import { FC } from "react";
+import SearchInput from "../../input/SearchInput";
 import { deepPurple } from "@mui/material/colors";
+import { selectUser, userResults } from "../../../store/user/user.reducer";
+import { useSelector } from "react-redux";
 
-const SearchHeader = ({ user }) => {
+type SearchHeaderProps = {
+  displayName?: string;
+  photoURL?: string;
+  user?: userResults | null;
+};
+
+const SearchHeader: FC<SearchHeaderProps> = () => {
+  const userData = useSelector(selectUser);
+  const { user } = userData;
   return (
     <>
       <Box className=" w-full h-[15%] flex  justify-between items-center">
@@ -14,7 +24,10 @@ const SearchHeader = ({ user }) => {
           <Avatar
             {...(user === null
               ? null
-              : { alt: user.displayName || "Anonim", src: user.photoURL })}
+              : {
+                  alt: user.displayName || "Anonim",
+                  src: user.photoURL,
+                })}
             sx={{ width: 50, height: 50, bgcolor: deepPurple[500] }}
           />
         </Box>

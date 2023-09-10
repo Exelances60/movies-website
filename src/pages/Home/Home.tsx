@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
-import NavigationBar from "../../componets/layout/NavigationBar/NavigationBar";
 import HomePageContainer from "../../componets/layout/HomePageContainer/HomePageContainer";
 import { useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectUser } from "../../store/user/user.reducer";
-
 import {
   fetchUpComingMovies,
   popularTvShows,
 } from "../../store/movieData/movie.reducer";
+import { useAppDispatch } from "../../store/store";
+import NavigationBar from "../../componets/layout/NavigationBar/NavigationBar";
 
 const Home = () => {
   const navigate = useNavigate();
   const user = useSelector(selectUser);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     if (Object.keys(user).length === 0) {
       navigate("/");

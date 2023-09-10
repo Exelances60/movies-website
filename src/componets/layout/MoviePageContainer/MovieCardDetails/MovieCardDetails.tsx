@@ -1,14 +1,27 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import {
+  IClickMovieDetails,
+  popularMoviesResults,
+} from "../../../../store/movieData/movie.reducer";
+import { FC } from "react";
 
-const MovieCardDetails = ({ clickShows, details }) => {
+type MovieCardDetailsProps = {
+  clickShows: popularMoviesResults;
+  details: IClickMovieDetails;
+};
+
+const MovieCardDetails: FC<MovieCardDetailsProps> = ({
+  clickShows,
+  details,
+}) => {
   return (
     <>
       <Box className=" w-full  text-white md:flex ">
         <Box className="w-[100%] h-full   box-border p-5 ">
           <Box className="w-full h-[100%]   flex flex-col">
             <Typography
-              variant="h8"
+              variant="h6"
               fontFamily={"sans-serif"}
               fontWeight={"bold"}
             >
@@ -22,7 +35,7 @@ const MovieCardDetails = ({ clickShows, details }) => {
                 : null}
             </Typography>
             <Typography
-              variant="p"
+              variant="body1"
               sx={{ marginTop: "15px" }}
               fontFamily={"sans-serif"}
             >

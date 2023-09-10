@@ -1,7 +1,14 @@
 import { ListItem, ListItemAvatar, ListItemText, List } from "@mui/material";
 import React from "react";
+import { FC } from "react";
 
-const ListNav = ({ header, icon, onClick }) => {
+type ListNavProps = {
+  header: string;
+  icon: React.ReactNode;
+  onClick?: () => void;
+};
+
+const ListNav: FC<ListNavProps> = ({ header, icon, onClick }) => {
   return (
     <>
       <List

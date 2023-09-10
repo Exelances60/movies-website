@@ -4,7 +4,7 @@ import { RootState } from "../store";
 
 export const fetchPopularMovies = createAsyncThunk(
   "movie/fetchPopularMovies",
-  async () => {
+  async (): Promise<IpopularMovies> => {
     const options = {
       method: "GET",
       headers: {
@@ -23,7 +23,7 @@ export const fetchPopularMovies = createAsyncThunk(
 );
 export const fetchUpComingMovies = createAsyncThunk(
   "movie/fetchUpComingMovies",
-  async () => {
+  async (): Promise<IpopularMovies> => {
     const options = {
       method: "GET",
       headers: {
@@ -63,7 +63,7 @@ export const fetchMovieVideos = createAsyncThunk(
 
 export const popularTvShows = createAsyncThunk(
   "movie/popularTvShows",
-  async () => {
+  async (): Promise<IpopularMovies> => {
     const options = {
       method: "GET",
       headers: {
@@ -121,49 +121,53 @@ export type IpopularMovies = {
   total_pages: number;
   total_results: number;
 };
+export type IClickMovieDetailsGenres = {
+  id: number;
+  name: string;
+};
+
+export type IClickMovieDetails = popularMoviesResults & {
+  genres: IClickMovieDetailsGenres[];
+};
+export type IClickShowsResult = {
+  backdrop_path: string;
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  key: string;
+  official: boolean;
+  published_at: string;
+  site: string;
+  size: number;
+  type: string;
+};
+
+export type IClickShowsVideos = {
+  id: number;
+  results: IClickShowsResult[];
+};
 
 export type MovieState = {
   popularMovies: IpopularMovies;
   upComingMovies: IpopularMovies;
   popularTvShows: IpopularMovies;
-  clickShows: object;
-  clickShowsVideos: object;
-  clickMoviesDetails: object;
+  clickShows: popularMoviesResults;
+  clickShowsVideos: IClickShowsVideos;
+  clickMoviesDetails: IClickMovieDetails;
 };
-export type popularMoviesMap = {
-  [key: string]: popularMoviesResults[];
+
+const initialState: MovieState = {
+  popularMovies: {} as IpopularMovies,
+  upComingMovies: {} as IpopularMovies,
+  popularTvShows: {} as IpopularMovies,
+  clickShows: {} as popularMoviesResults,
+  clickShowsVideos: {} as IClickShowsVideos,
+  clickMoviesDetails: {} as IClickMovieDetails,
 };
 
 export const movieSlice = createSlice({
   name: "movie",
-  initialState: {
-    popularMovies: {
-      page: 0,
-      results: [],
-      total_pages: 0,
-      total_results: 0,
-    },
-    upComingMovies: {
-      page: 0,
-      results: [],
-      total_pages: 0,
-      total_results: 0,
-    },
-    popularTvShows: {
-      page: 0,
-      results: [],
-      total_pages: 0,
-      total_results: 0,
-    },
-    clickShows: {
-      page: 0,
-      results: [],
-      total_pages: 0,
-      total_results: 0,
-    },
-    clickShowsVideos: {},
-    clickMoviesDetails: {},
-  } as MovieState,
+  initialState: initialState,
   reducers: {
     setPopularMovies: (state, action) => {
       state.popularMovies = action.payload;
