@@ -29,7 +29,6 @@ const MoviePageContainer = () => {
   const details = useSelector(selectClickMoviesDetails) || null;
 
   useEffect(() => {
-    checkLogin(user);
     dispatch(fetchMovieVideos(clickShows.id));
     dispatch(clickMoviesDetails(clickShows.id));
   }, [user, clickShows]);
@@ -46,6 +45,7 @@ const MoviePageContainer = () => {
       <SearchHeader></SearchHeader>
       <MovieCardContainer
         clickShows={clickShows}
+        user={user}
         details={details || null}
         filteredResults={filteredResults}
       ></MovieCardContainer>

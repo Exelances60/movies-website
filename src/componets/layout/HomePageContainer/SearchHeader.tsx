@@ -14,6 +14,8 @@ type SearchHeaderProps = {
 const SearchHeader: FC<SearchHeaderProps> = () => {
   const userData = useSelector(selectUser);
   const { user } = userData;
+  const displayName = user?.displayName || "Anonim";
+  const photoURL = user?.photoURL;
   return (
     <>
       <Box className=" w-full h-[15%] flex  justify-between items-center">
@@ -22,12 +24,8 @@ const SearchHeader: FC<SearchHeaderProps> = () => {
         </Box>
         <Box className=" w-[20%] h-[50%] flex justify-center items-center  ">
           <Avatar
-            {...(user === null
-              ? null
-              : {
-                  alt: user.displayName || "Anonim",
-                  src: user.photoURL,
-                })}
+            alt={displayName}
+            src={photoURL}
             sx={{ width: 50, height: 50, bgcolor: deepPurple[500] }}
           />
         </Box>

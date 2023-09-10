@@ -8,32 +8,34 @@ import {
 } from "../../../../store/movieData/movie.reducer";
 import { FC } from "react";
 import MovieCardDetails from "../MovieCardDetails/MovieCardDetails";
+import { HomePageContainerProps } from "../../../../store/user/user.reducer";
+import { useNavigate } from "react-router";
 
 type MovieCardContainerProps = {
   filteredResults: IClickShowsResult[];
   clickShows: popularMoviesResults;
   details: IClickMovieDetails;
+  user: HomePageContainerProps;
 };
 
 const MovieCardContainer: FC<MovieCardContainerProps> = ({
   filteredResults,
   clickShows,
   details,
+  user,
 }) => {
-  if (filteredResults.length === 0)
-    return (
-      <Box className="w-full h-[85%] box-border flex justify-center items-center"></Box>
-    );
-
-  console.log("filteredResults", filteredResults);
-  console.log("clickShows", clickShows);
-  console.log("details", details);
+  const navigate = useNavigate();
+  console.log("user", user);
+  if (Object.keys(user).length === 0) {
+    navigate("/");
+    return null;
+  }
   return (
     <>
       <Box className="w-full h-[85%] box-border">
         <Box className=" w-full h-[50%] rounded-xl overflow-hidden object-contain">
           <ReactPlayers
-            url={`https://www.youtube.com/watch?v=${filteredResults[0].key}`}
+            url={`https://www.youtube.com/watch?v=${filteredResults[0]?.key}`}
           ></ReactPlayers>
         </Box>
         <MovieCardDetails
