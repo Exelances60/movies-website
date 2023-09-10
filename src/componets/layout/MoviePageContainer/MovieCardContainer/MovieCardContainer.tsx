@@ -13,7 +13,7 @@ import { useNavigate } from "react-router";
 
 type MovieCardContainerProps = {
   filteredResults: IClickShowsResult[];
-  clickShows: popularMoviesResults;
+  clickShows: popularMoviesResults & { first_air_date: string };
   details: IClickMovieDetails;
   user: HomePageContainerProps;
 };

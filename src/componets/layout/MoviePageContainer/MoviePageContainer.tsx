@@ -9,6 +9,7 @@ import {
   IClickShowsResult,
   clickMoviesDetails,
   fetchMovieVideos,
+  popularMoviesResults,
   selectClickMoviesDetails,
   selectClickShows,
   selectClickShowsVideos,
@@ -16,11 +17,15 @@ import {
 import MovieCardContainer from "./MovieCardContainer/MovieCardContainer";
 import { useAppDispatch } from "../../../store/store";
 
+type ClickShowsForTv = popularMoviesResults & { first_air_date: string };
+
 const MoviePageContainer = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useSelector(selectUser);
-  const clickShows = useSelector(selectClickShows);
+  const clickShows: ClickShowsForTv = useSelector(
+    selectClickShows
+  ) as ClickShowsForTv;
   const clickShowsVideos = useSelector(selectClickShowsVideos);
   const { results } = clickShowsVideos;
   const [filteredResults, setFilteredResults] = useState<IClickShowsResult[]>(

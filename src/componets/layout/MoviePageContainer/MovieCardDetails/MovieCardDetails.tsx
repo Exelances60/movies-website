@@ -7,7 +7,7 @@ import {
 import { FC } from "react";
 
 type MovieCardDetailsProps = {
-  clickShows: popularMoviesResults;
+  clickShows: popularMoviesResults & { first_air_date: string };
   details: IClickMovieDetails;
 };
 
@@ -26,8 +26,10 @@ const MovieCardDetails: FC<MovieCardDetailsProps> = ({
               fontWeight={"bold"}
             >
               <p className="text-red-400">{clickShows.title}</p>{" "}
-              {clickShows.release_date.slice(0, 4)} -{" "}
-              {clickShows.original_language.toUpperCase()}
+              {clickShows.release_date === undefined
+                ? clickShows.first_air_date?.slice(0, 4)
+                : clickShows.release_date.slice(0, 4)}{" "}
+              - {clickShows.original_language.toUpperCase()}
               {details.genres
                 ? details.genres.map((genre) => {
                     return <span> - {genre.name} </span>;

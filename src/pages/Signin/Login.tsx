@@ -188,7 +188,12 @@ const Login = () => {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <form onSubmit={handleSubmit}>
+            <Box
+              onSubmit={handleSubmit}
+              noValidate
+              component="form"
+              autoComplete="off"
+            >
               <TextField
                 margin="normal"
                 required
@@ -256,7 +261,7 @@ const Login = () => {
                 </Grid>
               </Grid>
               <Copyright />
-            </form>
+            </Box>
           </Box>
         </Grid>
       </Grid>
