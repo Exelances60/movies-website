@@ -68,7 +68,6 @@ const Login = () => {
       email,
       password
     )) as responseType;
-    console.log(response, "asdas");
 
     if (response === "FirebaseError: Firebase: Error (auth/user-not-found).") {
       alert("Böyle bir kullanıcı bulunamadı.");

@@ -25,7 +25,6 @@ const MovieCardContainer: FC<MovieCardContainerProps> = ({
   user,
 }) => {
   const navigate = useNavigate();
-  console.log("user", user);
   if (Object.keys(user).length === 0) {
     navigate("/");
     return null;
