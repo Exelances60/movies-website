@@ -52,10 +52,12 @@ const NavigationBar = () => {
             icon={<MovieCreationOutlinedIcon></MovieCreationOutlinedIcon>}
           ></ListNav>
         </Link>
-        <ListNav
-          header={"TV Series"}
-          icon={<TvOutlinedIcon></TvOutlinedIcon>}
-        ></ListNav>
+        <Link to="/tvSeries">
+          <ListNav
+            header={"TV Series"}
+            icon={<TvOutlinedIcon></TvOutlinedIcon>}
+          ></ListNav>
+        </Link>
         <ListNav
           header={"Upcoming"}
           icon={<DateRangeOutlinedIcon></DateRangeOutlinedIcon>}

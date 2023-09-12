@@ -10,6 +10,7 @@ import { FC } from "react";
 import MovieCardDetails from "../MovieCardDetails/MovieCardDetails";
 import { HomePageContainerProps } from "../../../../store/user/user.reducer";
 import { useNavigate } from "react-router";
+import { useRequireAuth } from "../../../../utils/checkLogin/checkLogin";
 
 type MovieCardContainerProps = {
   filteredResults: IClickShowsResult[];
@@ -24,11 +25,7 @@ const MovieCardContainer: FC<MovieCardContainerProps> = ({
   details,
   user,
 }) => {
-  const navigate = useNavigate();
-  if (Object.keys(user).length === 0) {
-    navigate("/");
-    return null;
-  }
+  useRequireAuth();
   return (
     <>
       <Box className="w-full h-[85%] box-border">

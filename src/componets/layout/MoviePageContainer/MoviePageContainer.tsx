@@ -3,7 +3,6 @@ import SearchHeader from "../HomePageContainer/SearchHeader";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../store/user/user.reducer";
 import { Box } from "@mui/material";
-import { checkLogin } from "../../../utils/checkLogin/checkLogin";
 import { useNavigate } from "react-router";
 import {
   IClickShowsResult,
