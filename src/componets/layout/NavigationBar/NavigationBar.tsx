@@ -21,7 +21,7 @@ const NavigationBar = () => {
     navigate("/");
   };
   return (
-    <div className="  w-[25%] hidden md:flex xl:w-[15%] h-full bg-[#212121]  rounded-r-3xl flex-col items-center justify-center md:p-5 xl:p-5 box-border shadow-lg shadow-black ">
+    <div className="  w-[25%] hidden md:flex xl:w-[15%] h-full bg-[#212121]  rounded-r-3xl flex-col items-center justify-center md:p-5 xl:p-5 box-border  ">
       <Box className="w-full h-[15%]  flex items-center justify-center font-bold">
         <Typography
           sx={{
@@ -46,10 +46,12 @@ const NavigationBar = () => {
             icon={<HomeOutlinedIcon></HomeOutlinedIcon>}
           ></ListNav>
         </Link>
-        <ListNav
-          header={"Movies"}
-          icon={<MovieCreationOutlinedIcon></MovieCreationOutlinedIcon>}
-        ></ListNav>
+        <Link to="/moviesAll">
+          <ListNav
+            header={"Movies"}
+            icon={<MovieCreationOutlinedIcon></MovieCreationOutlinedIcon>}
+          ></ListNav>
+        </Link>
         <ListNav
           header={"TV Series"}
           icon={<TvOutlinedIcon></TvOutlinedIcon>}

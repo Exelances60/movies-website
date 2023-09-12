@@ -20,7 +20,6 @@ import { useAppDispatch } from "../../../store/store";
 type ClickShowsForTv = popularMoviesResults & { first_air_date: string };
 
 const MoviePageContainer = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useSelector(selectUser);
   const clickShows: ClickShowsForTv = useSelector(
@@ -46,7 +45,7 @@ const MoviePageContainer = () => {
     }
   }, [results]);
   return (
-    <Box className="w-full h-full p-5">
+    <Box>
       <SearchHeader></SearchHeader>
       <MovieCardContainer
         clickShows={clickShows}
