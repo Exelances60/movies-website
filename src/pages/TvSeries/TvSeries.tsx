@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import NavigationBar from "../../componets/layout/NavigationBar/NavigationBar";
 import ShowsCard from "../../componets/layout/MoviesAllPage/ShowsCard";
 import { useSelector } from "react-redux";

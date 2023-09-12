@@ -10,11 +10,12 @@ import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../../store/store";
 
 type ShowsCardProps = {
-  header: string;
+  header?: string;
   results: popularMoviesResults[];
+  flex?: string;
 };
 
-const ShowsCard: FC<ShowsCardProps> = ({ header, results }) => {
+const ShowsCard: FC<ShowsCardProps> = ({ header, results, flex }) => {
   const dispatch = useAppDispatch();
   return (
     <Box className="w-full h-full p-5">
@@ -23,7 +24,9 @@ const ShowsCard: FC<ShowsCardProps> = ({ header, results }) => {
         <Typography variant="h4" className="text-white">
           {header}
         </Typography>
-        <Box className="w-[90%] h-[80%] flex flex-wrap justify-evenly b">
+        <Box
+          className={`w-[90%] h-[80%] flex flex-wrap ${flex}  justify-evenly`}
+        >
           {results &&
             results.map((results) => {
               return (

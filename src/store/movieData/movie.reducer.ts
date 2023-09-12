@@ -99,6 +99,27 @@ export const clickMoviesDetails = createAsyncThunk(
     return response?.json();
   }
 );
+
+export const fetchWithQuery = createAsyncThunk(
+  "movie/fetchWithQuery",
+  async (query: string) => {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZjQ0YTFjMzJjZjdmZjBjMWYwNjkwZTVhMWFmZjE5YyIsInN1YiI6IjY0ZTBkMTQwYjc3ZDRiMTE0MjYwMmRjOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MRpaKOVBQfE0_w2v-pfcCaV1HwnqFcb4udc85yCyu7Q",
+      },
+    };
+
+    const response = await fetch(
+      `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1`,
+      options
+    );
+    return response?.json();
+  }
+);
+
 export type popularMoviesResults = {
   adult: boolean;
   backdrop_path: string;
@@ -149,6 +170,7 @@ export type IClickShowsVideos = {
 
 export type MovieState = {
   popularMovies: IpopularMovies;
+  movieWithQuery: IpopularMovies;
   upComingMovies: IpopularMovies;
   popularTvShows: IpopularMovies;
   clickShows: popularMoviesResults;
@@ -158,6 +180,7 @@ export type MovieState = {
 
 const initialState: MovieState = {
   popularMovies: {} as IpopularMovies,
+  movieWithQuery: {} as IpopularMovies,
   upComingMovies: {} as IpopularMovies,
   popularTvShows: {} as IpopularMovies,
   clickShows: {} as popularMoviesResults,
@@ -201,6 +224,9 @@ export const movieSlice = createSlice({
     builder.addCase(clickMoviesDetails.fulfilled, (state, action) => {
       state.clickMoviesDetails = action.payload;
     });
+    builder.addCase(fetchWithQuery.fulfilled, (state, action) => {
+      state.movieWithQuery = action.payload;
+    });
   },
 });
 
@@ -216,5 +242,7 @@ export const selectClickShowsVideos = (state: RootState) =>
   state.movie.clickShowsVideos;
 export const selectClickMoviesDetails = (state: RootState) =>
   state.movie.clickMoviesDetails;
+export const selectQueryMovie = (state: RootState) =>
+  state.movie.movieWithQuery;
 
 export default movieSlice.reducer;
