@@ -1,8 +1,12 @@
-import React, { useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import HomePageContainer from "../../componets/layout/HomePageContainer/HomePageContainer";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../store/user/user.reducer";
+import {
+  selectUser,
+  setPhotoURL,
+  userResults,
+} from "../../store/user/user.reducer";
 import {
   fetchUpComingMovies,
   popularTvShows,
@@ -10,18 +14,31 @@ import {
 import { useAppDispatch } from "../../store/store";
 import NavigationBar from "../../componets/layout/NavigationBar/NavigationBar";
 
-const Home = () => {
+type HomeProps = {
+  user: userResults | null;
+  photoURL: string;
+};
+
+const Home: FC<HomeProps> = () => {
   const navigate = useNavigate();
-  const user = useSelector(selectUser);
+  const userData = useSelector(selectUser);
+  const { user } = userData;
   const dispatch = useAppDispatch();
   useEffect(() => {
-    if (Object.keys(user).length === 0) {
-      navigate("/");
-    }
+    const fetchUserData = async () => {
+      try {
+        if (Object.keys(userData).length === 0) {
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
     dispatch(fetchUpComingMovies());
     dispatch(popularTvShows());
   }, [user]);
-
   return (
     <div className="w-full h-[100vh] bg-[#191919] flex">
       <div className="w-full h-[100vh] bg-[#191919] flex">

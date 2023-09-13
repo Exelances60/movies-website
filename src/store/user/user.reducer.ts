@@ -6,6 +6,7 @@ export type userResults = {
   displayName?: string;
   email: string;
   photoURL?: string;
+  uid: string;
 };
 type tokenResponse = {
   displayName: string;
@@ -26,9 +27,11 @@ export type HomePageContainerProps = {
 
 export type userInıtalState = {
   user: HomePageContainerProps;
+  photoURLFile?: string;
 };
 const initialState: userInıtalState = {
   user: {} as HomePageContainerProps,
+  photoURLFile: "",
 };
 
 export const userSlice = createSlice({
@@ -38,11 +41,15 @@ export const userSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
+    setPhotoURL: (state, action) => {
+      state.photoURLFile = action.payload;
+    },
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, setPhotoURL } = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user.user;
+export const selectPhotoURL = (state: RootState) => state.user.photoURLFile;
 
 export const userReducer = userSlice.reducer;

@@ -23,11 +23,18 @@ import {
   signInWithEmail,
   signInWithGooglePopup,
 } from "../../utils/firebase.utils";
-import { HomePageContainerProps, setUser } from "../../store/user/user.reducer";
+import {
+  HomePageContainerProps,
+  setPhotoURL,
+  setUser,
+  userResults,
+} from "../../store/user/user.reducer";
 import { useNavigate } from "react-router";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { HTMLAttributes, FormEvent, MouseEvent } from "react";
+import { getUsersWithFirebase } from "../../utils/firebase.utils";
+import { DocumentData } from "firebase/firestore";
 
 function Copyright(props: HTMLAttributes<HTMLElement>) {
   return (
@@ -45,8 +52,12 @@ function Copyright(props: HTMLAttributes<HTMLElement>) {
 const defaultTheme = createTheme();
 
 type responseType = HomePageContainerProps & string;
+type LoginProps = {
+  user: userResults | null;
+  photoURL: string;
+};
 
-const Login = () => {
+const Login: FC<LoginProps> = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,7 +84,12 @@ const Login = () => {
       alert("Böyle bir kullanıcı bulunamadı.");
     } else {
       distpatch(setUser(response));
+      const { user } = response;
       setLoading(false);
+      const userDatas: DocumentData = await getUsersWithFirebase(
+        user?.uid || ""
+      );
+      distpatch(setPhotoURL(userDatas[0].photoUrl));
       if (response && response.operationType === "signIn") {
         navigate("/home");
       } else {

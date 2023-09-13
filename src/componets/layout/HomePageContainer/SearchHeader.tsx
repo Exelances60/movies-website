@@ -2,7 +2,11 @@ import { Avatar, Box } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import SearchInput from "../../input/SearchInput";
 import { deepPurple } from "@mui/material/colors";
-import { selectUser, userResults } from "../../../store/user/user.reducer";
+import {
+  selectPhotoURL,
+  selectUser,
+  userResults,
+} from "../../../store/user/user.reducer";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../store/store";
 import {
@@ -15,8 +19,6 @@ import { Link } from "react-router-dom";
 import DropDown from "../DropDown/DropDown";
 
 type SearchHeaderProps = {
-  displayName?: string;
-  photoURL?: string;
   user?: userResults | null;
 };
 
@@ -26,10 +28,14 @@ const SearchHeader: FC<SearchHeaderProps> = () => {
   const movieWithQuery = useSelector(selectQueryMovie);
   const { results } = movieWithQuery;
   const { user } = userData;
-  const displayName = user?.displayName || "Anonim";
-  const photoURL = user?.photoURL;
   const [query, setQuery] = useState<string>("");
-  const [active, setActive] = useState();
+  const photoURLFile = useSelector(selectPhotoURL);
+  const [photoURL, setPhotoURL] = useState(photoURLFile);
+
+  useEffect(() => {
+    setPhotoURL(photoURLFile);
+  }, [photoURLFile]);
+
   useEffect(() => {
     if (query.length > 0) {
       dispatch(fetchWithQuery(query));
@@ -42,15 +48,16 @@ const SearchHeader: FC<SearchHeaderProps> = () => {
     <>
       <Box className=" w-full h-[15%] flex  justify-between items-center">
         <Box className="xl:w-[70%] w-[80%] ">
-          <SearchInput setQuery={setQuery} setActive={setActive}></SearchInput>
+          <SearchInput setQuery={setQuery}></SearchInput>
           {query.length > 0 ? <DropDown results={results}></DropDown> : null}
         </Box>
         <Box className=" w-[20%] h-[50%] flex justify-center items-center  ">
-          <Avatar
-            alt={displayName}
-            src={photoURL}
-            sx={{ width: 50, height: 50, bgcolor: deepPurple[500] }}
-          />
+          <Link to="/profile">
+            <Avatar
+              src={photoURL}
+              sx={{ width: 50, height: 50, bgcolor: deepPurple[500] }}
+            />
+          </Link>
         </Box>
       </Box>
     </>

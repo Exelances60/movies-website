@@ -5,6 +5,7 @@ import Home from "./pages/Home/Home";
 import Movie from "./pages/Movie/Movie";
 import MoviesAll from "./pages/MoviesAll/MoviesAll";
 import TvSeries from "./pages/TvSeries/TvSeries";
+import Profil from "./pages/Profile/Profil";
 
 function App() {
   let { id } = useParams();
@@ -16,6 +17,7 @@ function App() {
       <Route path="/Movie/:id" element={<Movie></Movie>}></Route>
       <Route path="/moviesAll" element={<MoviesAll></MoviesAll>}></Route>
       <Route path="/tvSeries" element={<TvSeries></TvSeries>}></Route>
+      <Route path="/profile" element={<Profil></Profil>}></Route>
     </Routes>
   );
 }

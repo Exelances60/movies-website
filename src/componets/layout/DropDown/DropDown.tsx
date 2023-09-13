@@ -28,7 +28,7 @@ const DropDown: FC<DropDownProps> = ({ results }) => {
                       <img
                         src={`https://image.tmdb.org/t/p/original/${val.poster_path}`}
                         alt=""
-                        className="w-full h-full object-cover cursor-pointer hover:brightness-110   transition duration-300 ease-in shadow-2xl"
+                        className="w-full h-full object-cover cursor-pointer rounded-md hover:brightness-110   transition duration-300 ease-in shadow-2xl"
                         onClick={() => {
                           dispatch(setClickShows(val));
                         }}

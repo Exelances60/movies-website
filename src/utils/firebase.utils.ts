@@ -15,6 +15,10 @@ import {
   getDocs,
   where,
   collection,
+  onSnapshot,
+  updateDoc,
+  doc,
+  DocumentData,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -55,6 +59,43 @@ export const signInWithEmail = async (email: string, password: string) => {
     return response;
   } catch (error) {
     return error;
+  }
+};
+export const uploadData = async (header: string, data: string, uid: string) => {
+  try {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const q = query(collection(db, "users"), where("uid", "==", uid));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      console.error("User not found");
+      return;
+    }
+
+    const userDoc = querySnapshot.docs[0];
+
+    await updateDoc(doc(db, "users", userDoc.id), {
+      [header]: data,
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    return error;
+  }
+};
+
+export const getUsersWithFirebase = async (
+  uid: string
+): Promise<DocumentData> => {
+  try {
+    const q = query(collection(db, "users"), where("uid", "==", uid));
+    const querySnapshot = await getDocs(q);
+
+    return querySnapshot.docs.map((doc) => doc.data());
+  } catch (error) {
+    console.error("Error in deneme:", error);
+    throw error;
   }
 };
 const googleProvider = new GoogleAuthProvider();
