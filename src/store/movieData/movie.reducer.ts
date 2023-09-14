@@ -149,6 +149,7 @@ export type IClickMovieDetailsGenres = {
 
 export type IClickMovieDetails = popularMoviesResults & {
   genres: IClickMovieDetailsGenres[];
+  name?: string;
 };
 export type IClickShowsResult = {
   backdrop_path: string;

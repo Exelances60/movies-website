@@ -9,7 +9,10 @@ import {
 import { Avatar } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import { getUsersWithFirebase, uploadData } from "../../utils/firebase.utils";
-import { IClickMovieDetails } from "../../store/movieData/movie.reducer";
+import {
+  IClickMovieDetails,
+  IClickShowsResult,
+} from "../../store/movieData/movie.reducer";
 import ProfileWatched from "../../componets/layout/ProfileWatched/ProfileWatched";
 
 type ProfilProps = {

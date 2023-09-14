@@ -3,6 +3,7 @@ import React, { FC } from "react";
 import { useAppDispatch } from "../../../store/store";
 import {
   IClickMovieDetails,
+  IClickShowsResult,
   setClickShows,
 } from "../../../store/movieData/movie.reducer";
 import { Link } from "react-router-dom";
@@ -33,7 +34,9 @@ const ProfileWatched: FC<ProfileWatchedProps> = ({ fireBaseUserData }) => {
                 </Link>
               </div>
               <div className="ml-2">
-                <h1 className="text-white">{item.original_title}</h1>
+                <h1 className="text-white">
+                  {item.original_title || item.name}
+                </h1>
                 <h1 className="text-white">{item.release_date}</h1>
                 <h1 className="text-white">{item.vote_average}</h1>
               </div>
