@@ -24,10 +24,11 @@ export type HomePageContainerProps = {
   user: userResults | null; // userResults veya null olabilir
   __tokenResponse: tokenResponse[];
 };
+export type photoProps = URL;
 
 export type userInıtalState = {
   user: HomePageContainerProps;
-  photoURLFile?: string;
+  photoURLFile: any;
 };
 const initialState: userInıtalState = {
   user: {} as HomePageContainerProps,

@@ -10,7 +10,7 @@ import {
 import { Avatar } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import { useAppDispatch } from "../../store/store";
-import { getUsersWithFirebase, uploadData } from "../../utils/firebase.utils";
+import { uploadData } from "../../utils/firebase.utils";
 
 type ProfilProps = {
   user: userResults | null;
@@ -18,29 +18,39 @@ type ProfilProps = {
 };
 
 const Profil: FC<ProfilProps> = () => {
-  const dispatch = useAppDispatch();
   const userData = useSelector(selectUser);
   const { user } = userData;
   const [displayName, setDisplayName] = useState<string>(
     user?.displayName || "Anonim"
   );
-  const photoURL: string = useSelector(selectPhotoURL) as string;
-  const [dene, setDene] = useState<string>("");
+
+  const photoURLFile = useSelector(selectPhotoURL);
+  const [dene, setDene] = useState("");
   useEffect(() => {
-    setDene(photoURL);
-  }, [photoURL]);
+    setDene(photoURLFile);
+  }, [photoURLFile]);
   const handleChangePhoto = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
       console.error("Select a file");
       return;
     } else {
-      const url = URL.createObjectURL(e.target.files[0]);
+      var file = e.target.files[0];
+      var reader = new FileReader();
+      var url = reader.readAsDataURL(file);
 
-      uploadData("photoUrl", url, user?.uid || "");
+      reader.onloadend = function (readerEvent: ProgressEvent<FileReader>) {
+        if (readerEvent?.target?.result) {
+          setDene(readerEvent.target.result as string);
+          uploadData(
+            "photoUrl",
+            readerEvent.target.result as string,
+            user?.uid || ""
+          );
+        }
+      };
     }
   };
 
-  console.log(dene);
   return (
     <div className="w-full h-[100vh] bg-[#191919] flex">
       <NavigationBar></NavigationBar>

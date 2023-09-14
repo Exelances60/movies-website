@@ -86,10 +86,7 @@ const Login: FC<LoginProps> = () => {
       distpatch(setUser(response));
       const { user } = response;
       setLoading(false);
-      const userDatas: DocumentData = await getUsersWithFirebase(
-        user?.uid || ""
-      );
-      distpatch(setPhotoURL(userDatas[0].photoUrl));
+
       if (response && response.operationType === "signIn") {
         navigate("/home");
       } else {

@@ -14,7 +14,6 @@ import {
   selectQueryMovie,
   setClickShows,
 } from "../../../store/movieData/movie.reducer";
-import ShowsCard from "../MoviesAllPage/ShowsCard";
 import { Link } from "react-router-dom";
 import DropDown from "../DropDown/DropDown";
 
@@ -23,18 +22,11 @@ type SearchHeaderProps = {
 };
 
 const SearchHeader: FC<SearchHeaderProps> = () => {
-  const userData = useSelector(selectUser);
   const dispatch = useAppDispatch();
   const movieWithQuery = useSelector(selectQueryMovie);
   const { results } = movieWithQuery;
-  const { user } = userData;
   const [query, setQuery] = useState<string>("");
   const photoURLFile = useSelector(selectPhotoURL);
-  const [photoURL, setPhotoURL] = useState(photoURLFile);
-
-  useEffect(() => {
-    setPhotoURL(photoURLFile);
-  }, [photoURLFile]);
 
   useEffect(() => {
     if (query.length > 0) {
@@ -54,7 +46,7 @@ const SearchHeader: FC<SearchHeaderProps> = () => {
         <Box className=" w-[20%] h-[50%] flex justify-center items-center  ">
           <Link to="/profile">
             <Avatar
-              src={photoURL}
+              src={photoURLFile}
               sx={{ width: 50, height: 50, bgcolor: deepPurple[500] }}
             />
           </Link>

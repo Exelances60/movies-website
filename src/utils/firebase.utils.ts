@@ -20,7 +20,6 @@ import {
   doc,
   DocumentData,
 } from "firebase/firestore";
-
 const firebaseConfig = {
   apiKey: "AIzaSyBSUvrxu428-o1QBydB02s7qSDowhF4-Jw",
   authDomain: "fashion-app-a5a0c.firebaseapp.com",
@@ -62,6 +61,7 @@ export const signInWithEmail = async (email: string, password: string) => {
   }
 };
 export const uploadData = async (header: string, data: string, uid: string) => {
+  console.log(data);
   try {
     const user = auth.currentUser;
     if (!user) return;
@@ -87,7 +87,7 @@ export const uploadData = async (header: string, data: string, uid: string) => {
 
 export const getUsersWithFirebase = async (
   uid: string
-): Promise<DocumentData> => {
+): Promise<DocumentData[]> => {
   try {
     const q = query(collection(db, "users"), where("uid", "==", uid));
     const querySnapshot = await getDocs(q);

@@ -13,17 +13,20 @@ import {
 } from "../../store/movieData/movie.reducer";
 import { useAppDispatch } from "../../store/store";
 import NavigationBar from "../../componets/layout/NavigationBar/NavigationBar";
+import { getUsersWithFirebase } from "../../utils/firebase.utils";
+import { DocumentData } from "firebase/firestore";
 
 type HomeProps = {
   user: userResults | null;
   photoURL: string;
 };
-
+export type Data = DocumentData[];
 const Home: FC<HomeProps> = () => {
   const navigate = useNavigate();
   const userData = useSelector(selectUser);
   const { user } = userData;
   const dispatch = useAppDispatch();
+  const [photoURLs, setPhotoURLs] = useState<Data | null>();
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -36,9 +39,23 @@ const Home: FC<HomeProps> = () => {
     };
 
     fetchUserData();
+    fetchPhotoURL();
     dispatch(fetchUpComingMovies());
     dispatch(popularTvShows());
   }, [user]);
+
+  const fetchPhotoURL = async () => {
+    try {
+      const response: Data = (await getUsersWithFirebase(
+        user?.uid || ""
+      )) as Data;
+
+      dispatch(setPhotoURL(response[0].photoUrl));
+    } catch (error) {
+      console.error("Error fetching photo URL:", error);
+    }
+  };
+  console.log(photoURLs);
   return (
     <div className="w-full h-[100vh] bg-[#191919] flex">
       <div className="w-full h-[100vh] bg-[#191919] flex">
