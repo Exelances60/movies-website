@@ -20,6 +20,7 @@ import {
   doc,
   DocumentData,
 } from "firebase/firestore";
+import { popularMoviesResults } from "../store/movieData/movie.reducer";
 const firebaseConfig = {
   apiKey: "AIzaSyBSUvrxu428-o1QBydB02s7qSDowhF4-Jw",
   authDomain: "fashion-app-a5a0c.firebaseapp.com",
@@ -60,25 +61,53 @@ export const signInWithEmail = async (email: string, password: string) => {
     return error;
   }
 };
-export const uploadData = async (header: string, data: string, uid: string) => {
-  console.log(data);
+export const uploadData = async (
+  header: string,
+  data: string | popularMoviesResults | any,
+  uid: string,
+  check?: boolean
+) => {
   try {
     const user = auth.currentUser;
     if (!user) return;
 
-    const q = query(collection(db, "users"), where("uid", "==", uid));
-    const querySnapshot = await getDocs(q);
+    if (check) {
+      const q = query(collection(db, "users"), where("uid", "==", uid));
+      const querySnapshot = await getDocs(q);
 
-    if (querySnapshot.empty) {
-      console.error("User not found");
-      return;
+      if (querySnapshot.empty) {
+        console.error("User not found");
+        return;
+      }
+
+      const userDoc = querySnapshot.docs[0];
+      const userData = userDoc.data().WatchedMovie;
+      if (userData == undefined) {
+        await updateDoc(doc(db, "users", userDoc.id), {
+          [header]: [data],
+        });
+        return;
+      } else {
+        userData.push(data);
+      }
+      await updateDoc(doc(db, "users", userDoc.id), {
+        [header]: userData,
+      });
+    } else {
+      const q = query(collection(db, "users"), where("uid", "==", uid));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        console.error("User not found");
+        return;
+      }
+
+      const userDoc = querySnapshot.docs[0];
+
+      await updateDoc(doc(db, "users", userDoc.id), {
+        [header]: data,
+      });
     }
-
-    const userDoc = querySnapshot.docs[0];
-
-    await updateDoc(doc(db, "users", userDoc.id), {
-      [header]: data,
-    });
   } catch (error) {
     console.error("Error:", error);
     return error;

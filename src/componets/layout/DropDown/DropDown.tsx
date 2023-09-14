@@ -1,13 +1,14 @@
 import { Box } from "@mui/material";
 import React, { FC } from "react";
 import {
+  IClickMovieDetails,
   popularMoviesResults,
   setClickShows,
 } from "../../../store/movieData/movie.reducer";
 import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../../store/store";
 type DropDownProps = {
-  results: popularMoviesResults[];
+  results: popularMoviesResults[] | IClickMovieDetails[];
 };
 
 const DropDown: FC<DropDownProps> = ({ results }) => {
