@@ -3,7 +3,6 @@ import React, { FC } from "react";
 import { useAppDispatch } from "../../../store/store";
 import {
   IClickMovieDetails,
-  IClickShowsResult,
   setClickShows,
 } from "../../../store/movieData/movie.reducer";
 import { Link } from "react-router-dom";

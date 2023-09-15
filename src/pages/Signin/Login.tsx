@@ -59,8 +59,8 @@ type LoginProps = {
 
 const Login: FC<LoginProps> = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const distpatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const popularMovies = useAppSelector((state) => state.movie.popularMovies);
@@ -268,7 +268,7 @@ const Login: FC<LoginProps> = () => {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/signUp" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

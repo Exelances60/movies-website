@@ -6,6 +6,7 @@ import Movie from "./pages/Movie/Movie";
 import MoviesAll from "./pages/MoviesAll/MoviesAll";
 import TvSeries from "./pages/TvSeries/TvSeries";
 import Profil from "./pages/Profile/Profil";
+import SignUp from "./pages/SignUp/SignUp";
 
 function App() {
   let { id } = useParams();
@@ -18,6 +19,7 @@ function App() {
       <Route path="/moviesAll" element={<MoviesAll></MoviesAll>}></Route>
       <Route path="/tvSeries" element={<TvSeries></TvSeries>}></Route>
       <Route path="/profile" element={<Profil></Profil>}></Route>
+      <Route path="/signUp" element={<SignUp></SignUp>}></Route>
     </Routes>
   );
 }

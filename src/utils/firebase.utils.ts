@@ -6,7 +6,6 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
-  User,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -35,10 +34,30 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
 export const db = getFirestore();
 
-export const createUserWithEmail = async (email: string, password: string) => {
+export const createUserWithEmail = async (
+  email: string,
+  password: string,
+  name: string
+) => {
   if (!email || !password) return;
 
-  return await createUserWithEmailAndPassword(auth, email, password);
+  try {
+    const response = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = response.user;
+    await addDoc(collection(db, "users"), {
+      uid: user.uid,
+      name: name,
+      authProvider: "local",
+      email: user.email,
+    });
+    return response;
+  } catch (error: any) {
+    alert("Kullanıcı Oluşturulamadı");
+  }
 };
 export const signInWithEmail = async (email: string, password: string) => {
   if (!email || !password) return;
@@ -61,6 +80,7 @@ export const signInWithEmail = async (email: string, password: string) => {
     return error;
   }
 };
+
 export const uploadData = async (
   header: string,
   data: string | popularMoviesResults | any,
