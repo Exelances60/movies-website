@@ -23,7 +23,6 @@ const MovieCardContainer: FC<MovieCardContainerProps> = ({
   filteredResults,
   clickShows,
   details,
-  user,
 }) => {
   useRequireAuth();
   return (

@@ -15,6 +15,7 @@ import { useAppDispatch } from "../../store/store";
 import NavigationBar from "../../componets/layout/NavigationBar/NavigationBar";
 import { getUsersWithFirebase } from "../../utils/firebase.utils";
 import { DocumentData } from "firebase/firestore";
+import LongMenu from "../../componets/Menu/Menu";
 
 type HomeProps = {
   user: userResults | null;
@@ -59,6 +60,7 @@ const Home: FC<HomeProps> = () => {
   return (
     <div className="w-full h-[100vh] bg-[#191919] flex">
       <div className="w-full h-[100vh] bg-[#191919] flex">
+        <LongMenu></LongMenu>
         <NavigationBar></NavigationBar>
         <HomePageContainer></HomePageContainer>
       </div>

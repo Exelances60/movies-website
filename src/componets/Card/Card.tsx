@@ -2,7 +2,6 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 import { useDispatch } from "react-redux";
 import {
-  IpopularMovies,
   popularMoviesResults,
   setClickShows,
 } from "../../store/movieData/movie.reducer";

@@ -14,6 +14,7 @@ import {
   IClickShowsResult,
 } from "../../store/movieData/movie.reducer";
 import ProfileWatched from "../../componets/layout/ProfileWatched/ProfileWatched";
+import LongMenu from "../../componets/Menu/Menu";
 
 type ProfilProps = {
   user: userResults | null;
@@ -63,6 +64,8 @@ const Profil: FC<ProfilProps> = () => {
 
   return (
     <div className="w-full h-[100vh] bg-[#191919] flex">
+      <LongMenu></LongMenu>
+
       <NavigationBar></NavigationBar>
       <div className=" w-full h-full p-10 box-border">
         <div className=" w-full h-full flex-col items-center  flex text-white">

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import { selectUser } from "../../store/user/user.reducer";
 import { useEffect } from "react";
 import { useRequireAuth } from "../../utils/checkLogin/checkLogin";
+import LongMenu from "../../componets/Menu/Menu";
 
 const MoviesAll = () => {
   const popularMovies = useSelector(selectPopularMovie);
@@ -16,6 +17,8 @@ const MoviesAll = () => {
 
   return (
     <div className="w-full h-[100vh] bg-[#191919] flex">
+      <LongMenu></LongMenu>
+
       <NavigationBar></NavigationBar>
       <ShowsCard header="Popular Movies" results={results}></ShowsCard>
     </div>
