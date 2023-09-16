@@ -1,5 +1,5 @@
-import { Box, Button, Typography } from "@mui/material";
-import React from "react";
+import { Box, Button, TextareaAutosize, Typography } from "@mui/material";
+import React, { useState } from "react";
 import {
   IClickMovieDetails,
   popularMoviesResults,
@@ -8,9 +8,12 @@ import { FC } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../store/user/user.reducer";
 import { uploadData } from "../../../../utils/firebase.utils";
+import { useRequireAuth } from "../../../../utils/checkLogin/checkLogin";
+
+type clickShowsProps = popularMoviesResults & { first_air_date: string };
 
 type MovieCardDetailsProps = {
-  clickShows: popularMoviesResults & { first_air_date: string };
+  clickShows: clickShowsProps;
   details: IClickMovieDetails;
 };
 
@@ -20,6 +23,8 @@ const MovieCardDetails: FC<MovieCardDetailsProps> = ({
 }) => {
   const userData = useSelector(selectUser);
   const { user } = userData;
+  const [comment, setComment] = useState<string | null>("");
+  const [dene, setDene] = useState<clickShowsProps | {}>([{}]);
 
   return (
     <>
@@ -57,7 +62,7 @@ const MovieCardDetails: FC<MovieCardDetailsProps> = ({
                 ":hover": { backgroundColor: "#4b4b4b" },
               }}
               onClick={() => {
-                uploadData("WatchedMovie", clickShows, user?.uid || "", true);
+                uploadData("WatchedMovie", dene, user?.uid || "", true);
               }}
             >
               Ekle
@@ -65,7 +70,27 @@ const MovieCardDetails: FC<MovieCardDetailsProps> = ({
           </Box>
           <Box className="w-full h-[10vh]"></Box>
         </Box>
-        <Box className="w-[30%] h-full  box-border p-5">asd</Box>
+        <Box className="w-[30%] h-full  box-border p-5">
+          {details.tagline}
+          <TextareaAutosize
+            className="w-full h-[30vh] text-black"
+            onChange={(e) => {
+              setComment(e.target.value);
+            }}
+          ></TextareaAutosize>
+          <Button
+            variant="contained"
+            onClick={() => {
+              const updateClickShows = {
+                ...clickShows,
+                comment: comment,
+              } as clickShowsProps;
+              setDene(updateClickShows);
+            }}
+          >
+            Yorumu Ekle
+          </Button>
+        </Box>
       </Box>
     </>
   );

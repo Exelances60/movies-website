@@ -13,11 +13,12 @@ type ProfileWatchedProps = {
 
 const ProfileWatched: FC<ProfileWatchedProps> = ({ fireBaseUserData }) => {
   const dispatch = useAppDispatch();
-
+  console.log(fireBaseUserData);
   return (
     <>
       <div className=" w-full h-[100%] p-5 box-border overflow-y-auto">
         {fireBaseUserData?.map((item) => {
+          console.log(item.comment);
           return (
             <div className="w-full h-[20%] mt-5 flex">
               <div className="w-[15%] h-full ">
@@ -38,6 +39,10 @@ const ProfileWatched: FC<ProfileWatchedProps> = ({ fireBaseUserData }) => {
                 </h1>
                 <h1 className="text-white">{item.release_date}</h1>
                 <h1 className="text-white">{item.vote_average}</h1>
+                <h1 className="text-white">
+                  User Comment :{" "}
+                  {item.comment === undefined ? "Yorum Yok" : item.comment}
+                </h1>
               </div>
             </div>
           );

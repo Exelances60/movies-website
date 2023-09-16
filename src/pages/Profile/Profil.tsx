@@ -15,6 +15,7 @@ import {
 } from "../../store/movieData/movie.reducer";
 import ProfileWatched from "../../componets/layout/ProfileWatched/ProfileWatched";
 import LongMenu from "../../componets/Menu/Menu";
+import { useRequireAuth } from "../../utils/checkLogin/checkLogin";
 
 type ProfilProps = {
   user: userResults | null;
@@ -24,6 +25,8 @@ type ProfilProps = {
 const Profil: FC<ProfilProps> = () => {
   const userData = useSelector(selectUser);
   const { user } = userData;
+  useRequireAuth();
+
   const photoURLFile = useSelector(selectPhotoURL);
   const [dene, setDene] = useState<string>("");
   const [fireBaseUserData, setFireBaseUserData] = useState<
