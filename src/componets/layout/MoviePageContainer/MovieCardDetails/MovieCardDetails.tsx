@@ -22,6 +22,7 @@ const MovieCardDetails: FC<MovieCardDetailsProps> = ({
   details,
 }) => {
   const userData = useSelector(selectUser);
+  /* asd */
   const { user } = userData;
   const [comment, setComment] = useState<string | null>("");
   const [dene, setDene] = useState<clickShowsProps | {}>([{}]);
