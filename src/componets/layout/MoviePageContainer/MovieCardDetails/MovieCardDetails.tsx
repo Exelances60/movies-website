@@ -8,7 +8,6 @@ import { FC } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../store/user/user.reducer";
 import { uploadData } from "../../../../utils/firebase.utils";
-import { useRequireAuth } from "../../../../utils/checkLogin/checkLogin";
 
 type clickShowsProps = popularMoviesResults & { first_air_date: string };
 
@@ -22,7 +21,6 @@ const MovieCardDetails: FC<MovieCardDetailsProps> = ({
   details,
 }) => {
   const userData = useSelector(selectUser);
-  /* asd */
   const { user } = userData;
   const [comment, setComment] = useState<string | null>("");
   const [dene, setDene] = useState<clickShowsProps | {}>([{}]);

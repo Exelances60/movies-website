@@ -43,6 +43,7 @@ const ShowsCard: FC<ShowsCardProps> = ({ header, results, flex }) => {
                         onClick={() => {
                           dispatch(setClickShows(results));
                         }}
+                        loading="lazy"
                       ></img>
                     </Link>
                   </Box>

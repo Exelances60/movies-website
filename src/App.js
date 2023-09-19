@@ -1,26 +1,35 @@
 import { Route, Routes, useParams } from "react-router-dom";
 import "./App.css";
-import Login from "./pages/Signin/Login";
-import Home from "./pages/Home/Home";
-import Movie from "./pages/Movie/Movie";
-import MoviesAll from "./pages/MoviesAll/MoviesAll";
-import TvSeries from "./pages/TvSeries/TvSeries";
-import Profil from "./pages/Profile/Profil";
-import SignUp from "./pages/SignUp/SignUp";
-
+import { Suspense, lazy } from "react";
+import { CircularProgress } from "@mui/material";
+const Login = lazy(() => import("./pages/Signin/Login"));
+const Home = lazy(() => import("./pages/Home/Home"));
+const Movie = lazy(() => import("./pages/Movie/Movie"));
+const MoviesAll = lazy(() => import("./pages/MoviesAll/MoviesAll"));
+const TvSeries = lazy(() => import("./pages/TvSeries/TvSeries"));
+const Profil = lazy(() => import("./pages/Profile/Profil"));
+const SignUp = lazy(() => import("./pages/SignUp/SignUp"));
 function App() {
   let { id } = useParams();
 
   return (
-    <Routes>
-      <Route index path="/" element={<Login />}></Route>
-      <Route path="/home" element={<Home></Home>}></Route>
-      <Route path="/Movie/:id" element={<Movie></Movie>}></Route>
-      <Route path="/moviesAll" element={<MoviesAll></MoviesAll>}></Route>
-      <Route path="/tvSeries" element={<TvSeries></TvSeries>}></Route>
-      <Route path="/profile" element={<Profil></Profil>}></Route>
-      <Route path="/signUp" element={<SignUp></SignUp>}></Route>
-    </Routes>
+    <Suspense
+      fallback={
+        <div className="w-full h-full flex items-center justify-center bg-[#191919]">
+          <CircularProgress></CircularProgress>
+        </div>
+      }
+    >
+      <Routes>
+        <Route index path="/" element={<Login />}></Route>
+        <Route path="/home" element={<Home></Home>}></Route>
+        <Route path="/Movie/:id" element={<Movie></Movie>}></Route>
+        <Route path="/moviesAll" element={<MoviesAll></MoviesAll>}></Route>
+        <Route path="/tvSeries" element={<TvSeries></TvSeries>}></Route>
+        <Route path="/profile" element={<Profil></Profil>}></Route>
+        <Route path="/signUp" element={<SignUp></SignUp>}></Route>
+      </Routes>
+    </Suspense>
   );
 }
 
