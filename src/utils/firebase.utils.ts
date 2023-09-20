@@ -133,6 +133,30 @@ export const uploadData = async (
   }
 };
 
+export const uploadDataSuggestion = async (
+  header: string,
+  data: string | popularMoviesResults | any,
+  uid: string,
+  codeProp: number
+) => {
+  const q = query(collection(db, "users"), where("uid", "==", uid));
+  const querySnapshot = await getDocs(q);
+
+  if (querySnapshot.empty) {
+    console.error("User not found");
+    return;
+  }
+
+  const userDoc = querySnapshot.docs[0];
+
+  await updateDoc(doc(db, "users", userDoc.id), {
+    [header]: {
+      data: data,
+      code: codeProp,
+    },
+  });
+};
+
 export const getAllUserWithFirebase = async () => {
   try {
     const q = query(collection(db, "users"));

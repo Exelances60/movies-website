@@ -26,7 +26,6 @@ const SearchProfile = () => {
     };
     getUserData();
   }, []);
-  console.log(user);
   return (
     <>
       {loading ? (

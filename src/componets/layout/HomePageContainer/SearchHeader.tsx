@@ -1,19 +1,24 @@
 import { Box, Button, Dialog } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import SearchInput from "../../input/SearchInput";
-import { userResults } from "../../../store/user/user.reducer";
+import { selectUser, userResults } from "../../../store/user/user.reducer";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../store/store";
 import {
+  IClickMovieDetails,
   fetchWithQuery,
   popularMoviesResults,
   selectQueryMovie,
+  suggestionsType,
 } from "../../../store/movieData/movie.reducer";
 import DropDown from "../DropDown/DropDown";
 import AvatarComponet from "../../Avatar/Avatar";
 import SearchIcon from "@mui/icons-material/Search";
 import { selectDialog, setDialog } from "../../../store/dialog/dialog.reducer";
-import { getAllUserWithFirebase } from "../../../utils/firebase.utils";
+import {
+  getAllUserWithFirebase,
+  getUsersWithFirebase,
+} from "../../../utils/firebase.utils";
 import UserSearch from "../UserSearch/UserSearch";
 import { DocumentData } from "firebase/firestore";
 
@@ -22,7 +27,8 @@ export type filteredUsers =
       name: string;
       photoUrl: string;
       uid: string;
-      WatchedMovie: popularMoviesResults[];
+      WatchedMovie?: popularMoviesResults[];
+      suggestions?: suggestionsType[];
     }
   | DocumentData;
 type SearchHeaderProps = {
@@ -37,27 +43,38 @@ const SearchHeader: FC<SearchHeaderProps> = () => {
   const [open, setOpen] = useState(false);
   const options = useSelector(selectDialog);
   const [userQuery, setUserQuery] = useState<string>("");
+  const userData = useSelector(selectUser);
+  const { user } = userData;
+  const [fireBaseUserData, setFireBaseUserData] = useState<
+    IClickMovieDetails[]
+  >([]);
+  const [show, setShow] = useState<boolean>(false);
+  useEffect(() => {
+    const getUserData = async () => {
+      const data = await getUsersWithFirebase(user?.uid || "");
+
+      if (data && data.length > 0 && data[0].hasOwnProperty("WatchedMovie")) {
+        setFireBaseUserData(data[0].WatchedMovie);
+      }
+    };
+    getUserData();
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
+    setShow(false);
     setOpen(false);
   };
 
-  useEffect(() => {
-    if (query.length > 0) {
-      dispatch(fetchWithQuery(query));
-    } else {
-      dispatch(fetchWithQuery(""));
-    }
-  }, [query]);
   const openPopUp = async () => {
     const users = await getAllUserWithFirebase();
     const filteredUsers: filteredUsers[] = users.filter((user) => {
       return user.name?.toLowerCase().includes(userQuery.toLowerCase());
     });
+
     return dispatch(
       setDialog({
         children: (
@@ -69,7 +86,10 @@ const SearchHeader: FC<SearchHeaderProps> = () => {
               ></SearchInput>
               <UserSearch
                 userQuery={userQuery}
+                setShow={setShow}
+                show={show}
                 filteredUsers={filteredUsers}
+                fireBaseUserData={fireBaseUserData}
               ></UserSearch>
               <Button onClick={handleClose} color="primary">
                 Close
@@ -82,7 +102,8 @@ const SearchHeader: FC<SearchHeaderProps> = () => {
   };
   useEffect(() => {
     openPopUp();
-  }, [userQuery]);
+  }, [userQuery, show]);
+
   return (
     <>
       <Box className=" w-full h-[15%] flex  justify-between items-center">

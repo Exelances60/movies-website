@@ -1,20 +1,35 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import unkownProfile from "../../../assets/image/unkownProfile.webp";
 import { FC } from "react";
 import { filteredUsers } from "../HomePageContainer/SearchHeader";
 import { useNavigate } from "react-router";
-import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
+import { useAppDispatch } from "../../../store/store";
+import { IClickMovieDetails } from "../../../store/movieData/movie.reducer";
+import ProfileWatched from "../ProfileWatched/ProfileWatched";
 
 type UserTypeProps = {
   userQuery: string;
   filteredUsers: filteredUsers[];
+  setShow: Dispatch<SetStateAction<boolean>>;
+  show: boolean;
+  fireBaseUserData: IClickMovieDetails[];
 };
 
-const UserSearch: FC<UserTypeProps> = ({ userQuery, filteredUsers }) => {
+const UserSearch: FC<UserTypeProps> = ({
+  userQuery,
+  filteredUsers,
+  setShow,
+  show,
+  fireBaseUserData,
+}) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  /*   console.log(filteredUsers);
+   */
   return (
     <>
-      {userQuery.length > 0
+      {userQuery.length > 0 && show === false
         ? filteredUsers.map((user, i) => {
             return (
               <div
@@ -31,7 +46,6 @@ const UserSearch: FC<UserTypeProps> = ({ userQuery, filteredUsers }) => {
                     className="w-full h-full object-contain cursor-pointer rounded-md hover:brightness-110   transition duration-300 ease-in shadow-2xl"
                   ></img>
                 </div>
-
                 <div className="cursor-pointer hover:text-[#f9a825] transition flex flex-col duration-200 ease-in">
                   <p>{user.name}</p>
                   <p>
@@ -41,10 +55,31 @@ const UserSearch: FC<UserTypeProps> = ({ userQuery, filteredUsers }) => {
                       : user.WatchedMovie.length}
                   </p>
                 </div>
+
+                <Button
+                  variant="contained"
+                  sx={{
+                    marginLeft: "20px",
+                  }}
+                  onClick={() => {
+                    setShow(true);
+                  }}
+                >
+                  Film Öner
+                </Button>
               </div>
             );
           })
         : null}
+      {show ? (
+        <div className="w-full h-[100vh]">
+          <ProfileWatched
+            fireBaseUserData={fireBaseUserData}
+            send={true}
+            filteredUsers={filteredUsers}
+          ></ProfileWatched>
+        </div>
+      ) : null}
     </>
   );
 };

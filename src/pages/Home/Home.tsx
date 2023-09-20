@@ -9,13 +9,22 @@ import {
 } from "../../store/user/user.reducer";
 import {
   fetchUpComingMovies,
+  popularMoviesResults,
   popularTvShows,
 } from "../../store/movieData/movie.reducer";
 import { useAppDispatch } from "../../store/store";
 import NavigationBar from "../../componets/layout/NavigationBar/NavigationBar";
-import { getUsersWithFirebase } from "../../utils/firebase.utils";
+import {
+  getUsersWithFirebase,
+  uploadDataSuggestion,
+} from "../../utils/firebase.utils";
 import { DocumentData } from "firebase/firestore";
 import LongMenu from "../../componets/Menu/Menu";
+import { filteredUsers } from "../../componets/layout/HomePageContainer/SearchHeader";
+import { Dialog } from "@mui/material";
+import { selectDialog, setDialog } from "../../store/dialog/dialog.reducer";
+import { Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 type HomeProps = {
   user: userResults | null;
@@ -27,7 +36,12 @@ const Home: FC<HomeProps> = () => {
   const userData = useSelector(selectUser);
   const { user } = userData;
   const dispatch = useAppDispatch();
-  const [photoURLs, setPhotoURLs] = useState<Data | null>();
+  const [open, setOpen] = useState(false);
+  const options = useSelector(selectDialog);
+  const [firebaseUserData, setFirebaseUserData] = useState<
+    filteredUsers[] | DocumentData[]
+  >([]);
+  const [suggestionData, setSuggestionData] = useState<popularMoviesResults>();
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -38,7 +52,6 @@ const Home: FC<HomeProps> = () => {
         console.error("Error fetching user data:", error);
       }
     };
-
     fetchUserData();
     fetchPhotoURL();
     dispatch(fetchUpComingMovies());
@@ -50,18 +63,65 @@ const Home: FC<HomeProps> = () => {
       const response: Data = (await getUsersWithFirebase(
         user?.uid || ""
       )) as Data;
-
+      setFirebaseUserData(response);
+      setSuggestionData(firebaseUserData[0]?.suggestions.data);
       dispatch(setPhotoURL(response[0].photoUrl));
     } catch (error) {
       console.error("Error fetching photo URL:", error);
     }
   };
+  const handleClose = () => {
+    setOpen(false);
+    console.log("succses");
+    return uploadDataSuggestion("suggestions", {}, user?.uid || "", 200);
+  };
+  useEffect(() => {
+    if (firebaseUserData.length > 0) {
+      const firstUserData = firebaseUserData[0];
+      if (firstUserData?.suggestions?.code === 400) {
+        dispatch(
+          setDialog({
+            children: (
+              <>
+                <div className="bg-[#191919] w-[600px] h-[40vh] flex flex-col items-center text-white overflow-y-auto">
+                  <Typography className="text-white" variant="h4">
+                    Tavsiye Edilen Bir Film Var
+                  </Typography>
+                  <div className="text-center">
+                    <Link
+                      to={`/Movie/${firstUserData.suggestions.data?.original_title}`}
+                    >
+                      <img
+                        className="w-[200px] h-[300px]"
+                        src={`https://image.tmdb.org/t/p/original/${firstUserData.suggestions.data?.poster_path}`}
+                        alt=""
+                      />
+                    </Link>
+                    {firstUserData.suggestions.data?.title}
+                  </div>
+                </div>
+              </>
+            ),
+          })
+        );
+        setOpen(true);
+      }
+    }
+  }, [firebaseUserData]);
+
   return (
     <div className="w-full h-[100vh] bg-[#191919] flex">
       <div className="w-full h-[100vh] bg-[#191919] flex">
         <LongMenu></LongMenu>
         <NavigationBar></NavigationBar>
         <HomePageContainer></HomePageContainer>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          {...options}
+        ></Dialog>
       </div>
     </div>
   );

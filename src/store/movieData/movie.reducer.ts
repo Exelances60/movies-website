@@ -147,6 +147,11 @@ export type IClickMovieDetailsGenres = {
   name: string;
 };
 
+export type suggestionsType = {
+  code: number;
+  data: popularMoviesResults;
+};
+
 export type IClickMovieDetails = popularMoviesResults & {
   genres: IClickMovieDetailsGenres[];
   name?: string;

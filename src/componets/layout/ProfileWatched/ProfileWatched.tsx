@@ -1,17 +1,25 @@
 import React, { FC } from "react";
-
 import { useAppDispatch } from "../../../store/store";
 import {
   IClickMovieDetails,
   setClickShows,
 } from "../../../store/movieData/movie.reducer";
 import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
+import { uploadDataSuggestion } from "../../../utils/firebase.utils";
+import { filteredUsers } from "../HomePageContainer/SearchHeader";
 
 type ProfileWatchedProps = {
   fireBaseUserData: IClickMovieDetails[];
+  send?: boolean;
+  filteredUsers?: filteredUsers[];
 };
 
-const ProfileWatched: FC<ProfileWatchedProps> = ({ fireBaseUserData }) => {
+const ProfileWatched: FC<ProfileWatchedProps> = ({
+  fireBaseUserData,
+  filteredUsers,
+  send,
+}) => {
   const dispatch = useAppDispatch();
   return (
     <>
@@ -42,6 +50,24 @@ const ProfileWatched: FC<ProfileWatchedProps> = ({ fireBaseUserData }) => {
                   {item.comment === undefined ? "Yorum Yok" : item.comment}
                 </h1>
               </div>
+              {send ? (
+                <Button
+                  variant="contained"
+                  className="h-[5vh] ml-2"
+                  onClick={() => {
+                    if (filteredUsers !== undefined) {
+                      uploadDataSuggestion(
+                        "suggestions",
+                        item,
+                        filteredUsers[0].uid,
+                        400
+                      );
+                    }
+                  }}
+                >
+                  Öner
+                </Button>
+              ) : null}
             </div>
           );
         })}
