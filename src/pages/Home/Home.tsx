@@ -56,7 +56,6 @@ const Home: FC<HomeProps> = () => {
       console.error("Error fetching photo URL:", error);
     }
   };
-  console.log(photoURLs);
   return (
     <div className="w-full h-[100vh] bg-[#191919] flex">
       <div className="w-full h-[100vh] bg-[#191919] flex">

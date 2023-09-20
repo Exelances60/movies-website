@@ -14,7 +14,6 @@ import {
   getDocs,
   where,
   collection,
-  onSnapshot,
   updateDoc,
   doc,
   DocumentData,
@@ -131,6 +130,18 @@ export const uploadData = async (
   } catch (error) {
     console.error("Error:", error);
     return error;
+  }
+};
+
+export const getAllUserWithFirebase = async () => {
+  try {
+    const q = query(collection(db, "users"));
+    const querySnapshot = await getDocs(q);
+    const data = querySnapshot.docs.map((doc) => doc.data());
+    return data;
+  } catch (error) {
+    console.error("Error in deneme:", error);
+    throw error;
   }
 };
 

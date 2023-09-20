@@ -2,6 +2,7 @@ import { Route, Routes, useParams } from "react-router-dom";
 import "./App.css";
 import { Suspense, lazy } from "react";
 import { CircularProgress } from "@mui/material";
+const SearchProfile = lazy(() => import("./pages/SearchProfile/SearchProfile"));
 const Login = lazy(() => import("./pages/Signin/Login"));
 const Home = lazy(() => import("./pages/Home/Home"));
 const Movie = lazy(() => import("./pages/Movie/Movie"));
@@ -15,8 +16,8 @@ function App() {
   return (
     <Suspense
       fallback={
-        <div className="w-full h-full flex items-center justify-center bg-[#191919]">
-          <CircularProgress></CircularProgress>
+        <div className="w-full h-[100vh] flex items-center justify-center bg-[#191919]">
+          <CircularProgress color="success"></CircularProgress>
         </div>
       }
     >
@@ -28,6 +29,10 @@ function App() {
         <Route path="/tvSeries" element={<TvSeries></TvSeries>}></Route>
         <Route path="/profile" element={<Profil></Profil>}></Route>
         <Route path="/signUp" element={<SignUp></SignUp>}></Route>
+        <Route
+          path="/profile/:uid"
+          element={<SearchProfile></SearchProfile>}
+        ></Route>
       </Routes>
     </Suspense>
   );

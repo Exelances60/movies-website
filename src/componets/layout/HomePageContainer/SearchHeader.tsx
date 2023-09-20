@@ -1,40 +1,50 @@
-import { Avatar, Box } from "@mui/material";
+import { Box, Button, Dialog } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import SearchInput from "../../input/SearchInput";
-import { deepPurple } from "@mui/material/colors";
-import {
-  selectPhotoURL,
-  selectUser,
-  setUser,
-  userResults,
-} from "../../../store/user/user.reducer";
+import { userResults } from "../../../store/user/user.reducer";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../store/store";
 import {
   fetchWithQuery,
+  popularMoviesResults,
   selectQueryMovie,
-  setClickShows,
 } from "../../../store/movieData/movie.reducer";
-import { Link, useNavigate } from "react-router-dom";
 import DropDown from "../DropDown/DropDown";
-import * as React from "react";
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Person2Icon from "@mui/icons-material/Person2";
-import { signOutUser } from "../../../utils/firebase.utils";
+import AvatarComponet from "../../Avatar/Avatar";
+import SearchIcon from "@mui/icons-material/Search";
+import { selectDialog, setDialog } from "../../../store/dialog/dialog.reducer";
+import { getAllUserWithFirebase } from "../../../utils/firebase.utils";
+import UserSearch from "../UserSearch/UserSearch";
+import { DocumentData } from "firebase/firestore";
 
+export type filteredUsers =
+  | {
+      name: string;
+      photoUrl: string;
+      uid: string;
+      WatchedMovie: popularMoviesResults[];
+    }
+  | DocumentData;
 type SearchHeaderProps = {
   user?: userResults | null;
 };
 
 const SearchHeader: FC<SearchHeaderProps> = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const movieWithQuery = useSelector(selectQueryMovie);
   const { results } = movieWithQuery;
   const [query, setQuery] = useState<string>("");
-  const photoURLFile = useSelector(selectPhotoURL);
+  const [open, setOpen] = useState(false);
+  const options = useSelector(selectDialog);
+  const [userQuery, setUserQuery] = useState<string>("");
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     if (query.length > 0) {
@@ -43,62 +53,66 @@ const SearchHeader: FC<SearchHeaderProps> = () => {
       dispatch(fetchWithQuery(""));
     }
   }, [query]);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+  const openPopUp = async () => {
+    const users = await getAllUserWithFirebase();
+    const filteredUsers: filteredUsers[] = users.filter((user) => {
+      return user.name?.toLowerCase().includes(userQuery.toLowerCase());
+    });
+    return dispatch(
+      setDialog({
+        children: (
+          <>
+            <div className="bg-[#191919] w-[600px] h-[40vh] text-white overflow-y-auto">
+              <SearchInput
+                placeholder="Search Profile"
+                setUserQuery={setUserQuery}
+              ></SearchInput>
+              <UserSearch
+                userQuery={userQuery}
+                filteredUsers={filteredUsers}
+              ></UserSearch>
+              <Button onClick={handleClose} color="primary">
+                Close
+              </Button>
+            </div>
+          </>
+        ),
+      })
+    );
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleSignOut = () => {
-    signOutUser();
-    dispatch(setUser({}));
-    navigate("/");
-  };
-
+  useEffect(() => {
+    openPopUp();
+  }, [userQuery]);
   return (
     <>
       <Box className=" w-full h-[15%] flex  justify-between items-center">
         <Box className="xl:w-[70%] w-[80%] ">
-          <SearchInput setQuery={setQuery}></SearchInput>
+          <SearchInput
+            setQuery={setQuery}
+            rounded={"rounded-full"}
+            placeholder={"🎬 Search for a movie, tv show..."}
+          ></SearchInput>
           {query.length > 0 ? <DropDown results={results}></DropDown> : null}
         </Box>
-        <Box className=" w-[20%] h-[50%] flex justify-center items-center  ">
-          <Button
-            id="basic-button"
-            aria-controls={open ? "basic-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleClick}
+        <Box onClick={openPopUp}>
+          <SearchIcon
+            className="text-white ml-1 "
             sx={{
-              borderRadius: "100px",
-              width: "5%",
-              height: "50px",
+              fontSize: 30,
             }}
-          >
-            <Avatar
-              src={photoURLFile}
-              sx={{ width: 50, height: 50, bgcolor: deepPurple[500] }}
-            />
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
+            onClick={() => {
+              handleClickOpen();
             }}
-          >
-            <Link to="/profile">
-              <MenuItem onClick={handleClose}>
-                Profile <Person2Icon></Person2Icon>
-              </MenuItem>
-            </Link>
-            <MenuItem onClick={handleSignOut}>Logout</MenuItem>
-          </Menu>
+          ></SearchIcon>
         </Box>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          {...options}
+        ></Dialog>
+        <AvatarComponet></AvatarComponet>
       </Box>
     </>
   );

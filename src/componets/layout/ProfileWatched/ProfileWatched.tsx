@@ -13,12 +13,10 @@ type ProfileWatchedProps = {
 
 const ProfileWatched: FC<ProfileWatchedProps> = ({ fireBaseUserData }) => {
   const dispatch = useAppDispatch();
-  console.log(fireBaseUserData);
   return (
     <>
       <div className=" w-full h-[100%] p-5 box-border overflow-y-auto">
         {fireBaseUserData?.map((item) => {
-          console.log(item.comment);
           return (
             <div className="w-full h-[20%] mt-5 flex">
               <div className="w-[15%] h-full ">

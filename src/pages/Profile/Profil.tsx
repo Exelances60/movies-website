@@ -9,10 +9,7 @@ import {
 import { Avatar } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import { getUsersWithFirebase, uploadData } from "../../utils/firebase.utils";
-import {
-  IClickMovieDetails,
-  IClickShowsResult,
-} from "../../store/movieData/movie.reducer";
+import { IClickMovieDetails } from "../../store/movieData/movie.reducer";
 import ProfileWatched from "../../componets/layout/ProfileWatched/ProfileWatched";
 import LongMenu from "../../componets/Menu/Menu";
 import { useRequireAuth } from "../../utils/checkLogin/checkLogin";
@@ -20,9 +17,10 @@ import { useRequireAuth } from "../../utils/checkLogin/checkLogin";
 type ProfilProps = {
   user: userResults | null;
   photoURLFile: string;
+  uid?: string;
 };
 
-const Profil: FC<ProfilProps> = () => {
+const Profil: FC<ProfilProps> = ({ uid }) => {
   const userData = useSelector(selectUser);
   const { user } = userData;
   useRequireAuth();

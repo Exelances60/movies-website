@@ -7,6 +7,8 @@ export type userResults = {
   email: string;
   photoURL?: string;
   uid: string;
+  name?: string;
+  photoUrl?: string;
 };
 type tokenResponse = {
   displayName: string;
