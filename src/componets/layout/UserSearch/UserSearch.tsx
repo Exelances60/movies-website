@@ -25,8 +25,6 @@ const UserSearch: FC<UserTypeProps> = ({
 }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  /*   console.log(filteredUsers);
-   */
   return (
     <>
       {userQuery.length > 0 && show === false
@@ -34,7 +32,7 @@ const UserSearch: FC<UserTypeProps> = ({
             return (
               <div
                 key={i}
-                className="w-full h-[15%]  mb-2 flex items-center text-white"
+                className="w-full h-[15%]  mb-2 flex items-center  text-white"
               >
                 <div className="w-[15%] p-1 h-full">
                   <img

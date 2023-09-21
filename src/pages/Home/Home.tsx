@@ -54,7 +54,6 @@ const Home: FC<HomeProps> = () => {
   };
   const handleClose = () => {
     setOpen(false);
-    console.log("succses");
     return uploadDataSuggestion("suggestions", {}, user?.uid || "", 200);
   };
   useEffect(() => {
