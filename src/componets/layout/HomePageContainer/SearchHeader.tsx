@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../store/store";
 import {
   IClickMovieDetails,
-  fetchWithQuery,
   popularMoviesResults,
   selectQueryMovie,
   suggestionsType,
@@ -74,7 +73,6 @@ const SearchHeader: FC<SearchHeaderProps> = () => {
     const filteredUsers: filteredUsers[] = users.filter((user) => {
       return user.name?.toLowerCase().includes(userQuery.toLowerCase());
     });
-
     return dispatch(
       setDialog({
         children: (

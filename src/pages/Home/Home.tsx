@@ -33,15 +33,30 @@ type HomeProps = {
 export type Data = DocumentData[];
 const Home: FC<HomeProps> = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const userData = useSelector(selectUser);
   const { user } = userData;
-  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const options = useSelector(selectDialog);
   const [firebaseUserData, setFirebaseUserData] = useState<
     filteredUsers[] | DocumentData[]
   >([]);
-  const [suggestionData, setSuggestionData] = useState<popularMoviesResults>();
+  const fetchPhotoURL = async () => {
+    try {
+      const response: Data = (await getUsersWithFirebase(
+        user?.uid || ""
+      )) as Data;
+      setFirebaseUserData(response);
+      dispatch(setPhotoURL(response[0].photoUrl));
+    } catch (error) {
+      console.error("Error fetching photo URL:", error);
+    }
+  };
+  const handleClose = () => {
+    setOpen(false);
+    console.log("succses");
+    return uploadDataSuggestion("suggestions", {}, user?.uid || "", 200);
+  };
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -58,23 +73,6 @@ const Home: FC<HomeProps> = () => {
     dispatch(popularTvShows());
   }, [user]);
 
-  const fetchPhotoURL = async () => {
-    try {
-      const response: Data = (await getUsersWithFirebase(
-        user?.uid || ""
-      )) as Data;
-      setFirebaseUserData(response);
-      setSuggestionData(firebaseUserData[0]?.suggestions.data);
-      dispatch(setPhotoURL(response[0].photoUrl));
-    } catch (error) {
-      console.error("Error fetching photo URL:", error);
-    }
-  };
-  const handleClose = () => {
-    setOpen(false);
-    console.log("succses");
-    return uploadDataSuggestion("suggestions", {}, user?.uid || "", 200);
-  };
   useEffect(() => {
     if (firebaseUserData.length > 0) {
       const firstUserData = firebaseUserData[0];
@@ -84,19 +82,16 @@ const Home: FC<HomeProps> = () => {
             children: (
               <>
                 <div className="bg-[#191919] w-[600px] h-[40vh] flex flex-col items-center text-white overflow-y-auto">
-                  <Typography className="text-white" variant="h4">
+                  <Typography className="text-white" variant="h5">
                     Tavsiye Edilen Bir Film Var
                   </Typography>
                   <div className="text-center">
-                    <Link
-                      to={`/Movie/${firstUserData.suggestions.data?.original_title}`}
-                    >
-                      <img
-                        className="w-[200px] h-[300px]"
-                        src={`https://image.tmdb.org/t/p/original/${firstUserData.suggestions.data?.poster_path}`}
-                        alt=""
-                      />
-                    </Link>
+                    <img
+                      className="w-[200px] h-[300px]"
+                      src={`https://image.tmdb.org/t/p/original/${firstUserData.suggestions.data?.poster_path}`}
+                      alt=""
+                    />
+
                     {firstUserData.suggestions.data?.title}
                   </div>
                 </div>

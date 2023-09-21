@@ -12,7 +12,7 @@ import { CircularProgress } from "@mui/material";
 
 const SearchProfile = () => {
   const { uid } = useParams();
-  const [user, setUser] = useState<userResults | DocumentData>([{}]); // Updated the state type
+  const [user, setUser] = useState<userResults | DocumentData>([{}]);
   const [fireBaseUserData, setFireBaseUserData] = useState<
     IClickMovieDetails[]
   >([]);

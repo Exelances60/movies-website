@@ -24,7 +24,6 @@ const Profil: FC<ProfilProps> = ({ uid }) => {
   const userData = useSelector(selectUser);
   const { user } = userData;
   useRequireAuth();
-
   const photoURLFile = useSelector(selectPhotoURL);
   const [dene, setDene] = useState<string>("");
   const [fireBaseUserData, setFireBaseUserData] = useState<
@@ -57,7 +56,6 @@ const Profil: FC<ProfilProps> = ({ uid }) => {
   useEffect(() => {
     const getUserData = async () => {
       const data = await getUsersWithFirebase(user?.uid || "");
-
       setFireBaseUserData(data[0].WatchedMovie);
     };
     getUserData();
