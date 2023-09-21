@@ -24,7 +24,6 @@ const UserSearch: FC<UserTypeProps> = ({
   fireBaseUserData,
 }) => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   return (
     <>
       {userQuery.length > 0 && show === false
