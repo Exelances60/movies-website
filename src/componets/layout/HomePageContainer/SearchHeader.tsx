@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../store/store";
 import {
   IClickMovieDetails,
+  fetchWithQuery,
   popularMoviesResults,
   selectQueryMovie,
   suggestionsType,
@@ -101,6 +102,11 @@ const SearchHeader: FC<SearchHeaderProps> = () => {
   useEffect(() => {
     openPopUp();
   }, [userQuery, show]);
+  useEffect(() => {
+    dispatch(fetchWithQuery(query));
+  }, [query]);
+
+  console.log(movieWithQuery);
 
   return (
     <>

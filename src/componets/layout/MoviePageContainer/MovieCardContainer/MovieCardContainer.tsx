@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import React from "react";
 import ReactPlayers from "../../../input/ReactPlayer";
 import {
@@ -9,9 +9,7 @@ import {
 import { FC } from "react";
 import MovieCardDetails from "../MovieCardDetails/MovieCardDetails";
 import { HomePageContainerProps } from "../../../../store/user/user.reducer";
-import { useNavigate } from "react-router";
 import { useRequireAuth } from "../../../../utils/checkLogin/checkLogin";
-
 type MovieCardContainerProps = {
   filteredResults: IClickShowsResult[];
   clickShows: popularMoviesResults & { first_air_date: string };
