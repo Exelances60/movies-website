@@ -24,9 +24,9 @@ const ProfileWatched: FC<ProfileWatchedProps> = ({
   return (
     <>
       <div className=" w-full h-[100%] p-5 box-border overflow-y-auto">
-        {fireBaseUserData?.map((item) => {
+        {fireBaseUserData?.map((item, i) => {
           return (
-            <div className="w-full h-[20%] mt-5 flex">
+            <div className="w-full h-[20%] mt-5 flex" key={i}>
               <div className="w-[15%] h-full ">
                 <Link to={`/Movie/${item.original_title}`}>
                   <img
@@ -36,6 +36,7 @@ const ProfileWatched: FC<ProfileWatchedProps> = ({
                     onClick={() => {
                       dispatch(setClickShows(item));
                     }}
+                    data-testid="movieImage"
                   ></img>
                 </Link>
               </div>

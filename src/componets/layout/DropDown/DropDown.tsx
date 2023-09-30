@@ -16,7 +16,13 @@ const DropDown: FC<DropDownProps> = ({ results }) => {
 
   return (
     <>
-      <Box className=" absolute w-[58%] m-1 ml-2 overflow-x-auto flex-col p-2 box-border flex flex-wrap bg-[#212121] h-[50%] z-10">
+      <Box
+        sx={{
+          animationName: "wave",
+          animationDuration: "3s",
+        }}
+        className={` absolute w-[58%] m-1 ml-2 overflow-x-auto flex-col p-2 box-border flex flex-wrap bg-[#212121] h-[50%] z-10 ease-in duration-300`}
+      >
         <Box className="w-full h-full">
           {results && results.length > 0
             ? results.map((val, i) => (

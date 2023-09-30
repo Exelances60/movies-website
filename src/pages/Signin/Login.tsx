@@ -244,6 +244,7 @@ const Login: FC<LoginProps> = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
+                data-testid="submit"
                 sx={{ mt: 3, mb: 2, backgroundColor: "white", color: "black" }}
               >
                 Sign In

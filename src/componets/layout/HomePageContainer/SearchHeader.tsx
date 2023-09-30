@@ -106,8 +106,6 @@ const SearchHeader: FC<SearchHeaderProps> = () => {
     dispatch(fetchWithQuery(query));
   }, [query]);
 
-  console.log(movieWithQuery);
-
   return (
     <>
       <Box className=" w-full h-[15%] flex  justify-between items-center">

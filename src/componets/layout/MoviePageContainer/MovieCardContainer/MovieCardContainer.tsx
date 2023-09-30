@@ -22,7 +22,6 @@ const MovieCardContainer: FC<MovieCardContainerProps> = ({
   clickShows,
   details,
 }) => {
-  useRequireAuth();
   return (
     <>
       <Box className="w-full h-[85%] box-border">

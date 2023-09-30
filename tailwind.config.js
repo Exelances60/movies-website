@@ -5,13 +5,13 @@ module.exports = {
     extend: {
       keyframes: {
         wave: {
-          "0%": { opacity: "0" },
+          "0%": { height: "0" },
 
-          "20%": { opacity: "1" },
+          "100%": { height: "50%" },
         },
       },
       animation: {
-        "waving-hand": "wave 2s linear",
+        "easi-en": "ease-in 0.3s infinite ",
       },
     },
   },
